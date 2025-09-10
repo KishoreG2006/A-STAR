@@ -1,6 +1,6 @@
 <h1>ExpNo 4 : Implement A* search algorithm for a Graph</h1> 
-<h3>Name:       </h3>
-<h3>Register Number:           </h3>
+<h3>Name: KISHORE G    </h3>
+<h3>Register Number: 212223040099        </h3>
 <H3>Aim:</H3>
 <p>To ImplementA * Search algorithm for a Graph using Python 3.</p>
 <H3>Algorithm:</H3>
@@ -117,3 +117,90 @@ G 0 <br>
 <h2>Sample Output</h2>
 <hr>
 Path found: ['A', 'E', 'D', 'G']
+
+## Program
+~~~
+from collections import defaultdict
+
+H_dist = {}   # heuristic values
+
+def aStarAlgo(start_node, stop_node):
+    open_set = set([start_node])   # FIXED here
+    closed_set = set()
+    g = {start_node: 0}
+    parents = {start_node: start_node}
+
+    while open_set:
+        n = None
+        for v in open_set:
+            if n is None or g[v] + heuristic(v) < g[n] + heuristic(n):
+                n = v
+
+        if n is None:
+            print("Path does not exist!")
+            return None
+
+        if n == stop_node:
+            path = []
+            while parents[n] != n:
+                path.append(n)
+                n = parents[n]
+            path.append(start_node)
+            path.reverse()
+            print("Path found:", path)
+            return path
+
+        for (m, weight) in get_neighbors(n):
+            if m not in open_set and m not in closed_set:
+                open_set.add(m)
+                parents[m] = n
+                g[m] = g[n] + weight
+            elif g[m] > g[n] + weight:
+                g[m] = g[n] + weight
+                parents[m] = n
+                if m in closed_set:
+                    closed_set.remove(m)
+                    open_set.add(m)
+
+        open_set.remove(n)
+        closed_set.add(n)
+
+    print("Path does not exist!")
+    return None
+
+
+def get_neighbors(v):
+    return Graph_nodes[v] if v in Graph_nodes else []
+
+
+def heuristic(n):
+    return H_dist[n]
+
+
+# -------- Input --------
+graph = defaultdict(list)
+n, e = map(int, input("Enter nodes and edges: ").split())
+
+for i in range(e):
+    u, v, cost = input().split()
+    cost = int(cost)
+    graph[u].append((v, cost))
+    graph[v].append((u, cost))   # undirected graph
+
+for i in range(n):
+    node, h = input().split()
+    H_dist[node] = int(h)
+
+Graph_nodes = graph
+
+start = input("Enter start node: ")
+goal = input("Enter goal node: ")
+aStarAlgo(start, goal)
+
+~~~
+## Output
+<img width="1400" height="685" alt="image" src="https://github.com/user-attachments/assets/0a7617f5-99a2-4f99-9683-f477efbc4267" />
+<img width="1406" height="487" alt="image" src="https://github.com/user-attachments/assets/57cdbf42-0df0-42eb-aaea-8d25e7b80ee2" />
+
+## Result
+Thus a graph was constructed and implemantation of A star Search for the same graph was done successfully.
